@@ -1327,7 +1327,6 @@ function showGithubUploadBanner(msg, isError) {
 async function githubUpload() {
   const token = getGitHubToken();
   if (!token) {
-    // Show token input box
     document.getElementById('ghTokenBox').classList.add('show');
     showToast('请先配置 GitHub Token');
     return;
@@ -1340,7 +1339,6 @@ async function githubUpload() {
   
   try {
     // 1. Build the new HTML with current data
-    // Temporarily remove 'show' from overlays to prevent them appearing in saved HTML
     const _ao = document.getElementById('adminOverlay');
     const _at = document.getElementById('adminToast');
     const _pb = document.getElementById('publishBanner');
@@ -1354,7 +1352,6 @@ async function githubUpload() {
     if (_pb) _pb.classList.remove('show');
     if (_ghb) _ghb.classList.remove('show');
     const currentDoc = document.documentElement.outerHTML;
-    // Restore show classes
     if (_aoHad && _ao) _ao.classList.add('show');
     if (_atHad && _at) _at.classList.add('show');
     if (_pbHad && _pb) _pb.classList.add('show');
@@ -1367,52 +1364,82 @@ async function githubUpload() {
       newHtml = '<!DOCTYPE html>\n' + newHtml;
     }
     
-    // 2. Get current file SHA (needed for update)
-    const apiUrl = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`;
+    // 2. GitHub API 配置（含代理备用通道）
+    const directApi = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`;
+    const proxyApis = [
+      `https://corsproxy.io/?https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`,
+      `https://api.allorigins.win/raw?url=${encodeURIComponent(directApi)}`
+    ];
+    const apiUrls = [directApi, ...proxyApis];
     const headers = {
       'Authorization': `token ${token}`,
       'Accept': 'application/vnd.github.v3+json'
     };
     
+    // 3. 尝试获取文件 SHA（依次尝试直连和代理）
     let sha = null;
-    try {
-      const _ctrl1 = new AbortController();
-      const _timer1 = setTimeout(() => _ctrl1.abort(), 30000);
-      const getResp = await fetch(apiUrl + '?ref=' + GH_BRANCH, { headers, signal: _ctrl1.signal });
-      clearTimeout(_timer1);
-      if (getResp.ok) {
-        const getData = await getResp.json();
-        sha = getData.sha;
-      }
-    } catch(e) {
-      if (e.name === 'AbortError') throw new Error('获取文件信息超时（30秒），请检查网络后重试');
+    let workingUrl = null;
+    for (const apiUrl of apiUrls) {
+      try {
+        showGithubUploadBanner('🔄 正在连接 GitHub...');
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 15000);
+        const resp = await fetch(apiUrl + '?ref=' + GH_BRANCH, { headers, signal: ctrl.signal });
+        clearTimeout(timer);
+        if (resp.ok) {
+          const data = await resp.json();
+          sha = data.sha;
+          workingUrl = apiUrl;
+          break;
+        }
+      } catch(e) { /* try next */ }
     }
+    if (!workingUrl) throw new Error('无法连接 GitHub，直连和代理均失败。请检查网络或开启代理。');
     
-    // 3. Base64 encode content
-    const content = btoa(unescape(encodeURIComponent(newHtml)));
-    
-    // 4. Upload via PUT
+    // 4. 上传文件
+    const b64 = btoa(unescape(encodeURIComponent(newHtml)));
     const body = {
       message: 'Update from admin panel',
-      content: content,
+      content: b64,
       branch: GH_BRANCH
     };
     if (sha) body.sha = sha;
     
-    const _ctrl2 = new AbortController();
-    const _timer2 = setTimeout(() => _ctrl2.abort(), 60000);
-    const putResp = await fetch(apiUrl, {
-      method: 'PUT',
-      headers: headers,
-      body: JSON.stringify(body),
-      signal: _ctrl2.signal
-    });
-    clearTimeout(_timer2);
+    showGithubUploadBanner('📤 正在上传...');
+    let putResp = null;
+    try {
+      const ctrl2 = new AbortController();
+      const timer2 = setTimeout(() => ctrl2.abort(), 60000);
+      putResp = await fetch(workingUrl, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify(body),
+        signal: ctrl2.signal
+      });
+      clearTimeout(timer2);
+    } catch(e) {
+      // 直连超时，尝试代理上传
+      for (const proxyUrl of proxyApis) {
+        try {
+          const ctrl3 = new AbortController();
+          const timer3 = setTimeout(() => ctrl3.abort(), 60000);
+          putResp = await fetch(proxyUrl, {
+            method: 'PUT',
+            headers,
+            body: JSON.stringify(body),
+            signal: ctrl3.signal
+          });
+          clearTimeout(timer3);
+          workingUrl = proxyUrl;
+          break;
+        } catch(e2) { /* try next */ }
+      }
+    }
     
-    if (!putResp.ok) {
-      const errData = await putResp.json().catch(() => ({}));
-      const errMsg = errData.message || `HTTP ${putResp.status}`;
-      if (putResp.status === 401 || putResp.status === 403) {
+    if (!putResp || !putResp.ok) {
+      const errData = putResp ? await putResp.json().catch(() => ({})) : {};
+      const errMsg = errData.message || `HTTP ${putResp ? putResp.status : '无响应'}`;
+      if (putResp && (putResp.status === 401 || putResp.status === 403)) {
         throw new Error('Token 无效或权限不足，请重新配置。' + errMsg);
       }
       throw new Error('上传失败: ' + errMsg);
