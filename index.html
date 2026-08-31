@@ -717,7 +717,7 @@ a { text-decoration: none; color: inherit; }
 <body ai-translate-version="3.0.5" ai-translate-id="dkmejdpchbkcihdlengmhifgnigdjmba" ai-translate-oem="lenovo">
 
 <!-- Toast -->
-<div class="toast show" id="toast">Token 已保存</div>
+<div class="toast show" id="toast">资源添加成功，记得点「发布更新」同步</div>
 
 <!-- ===== Visitor View ===== -->
 <div id="app">
@@ -729,21 +729,21 @@ a { text-decoration: none; color: inherit; }
 
   <div class="stats-bar">
     <div class="stat-item">
-      <div class="stat-num" id="statTotal">0</div>
+      <div class="stat-num" id="statTotal">1</div>
       <div class="stat-label">全部资源</div>
     </div>
     <div class="stat-item">
-      <div class="stat-num" id="statCat">0</div>
+      <div class="stat-num" id="statCat">1</div>
       <div class="stat-label">分类</div>
     </div>
     <div class="stat-item">
-      <div class="stat-num" id="statToday">0</div>
+      <div class="stat-num" id="statToday">1</div>
       <div class="stat-label">今日更新</div>
     </div>
   </div>
 
   <div class="tabs-wrapper">
-    <div class="tabs" id="tabs"><div class="tab active" onclick="switchCat('全部')">全部</div></div>
+    <div class="tabs" id="tabs"><div class="tab active" onclick="switchCat('全部')">全部</div><div class="tab " onclick="switchCat('课件游戏')">课件游戏</div></div>
   </div>
 
   <div class="search-bar">
@@ -751,10 +751,23 @@ a { text-decoration: none; color: inherit; }
   </div>
 
   <div class="resources" id="resourceList">
-      <div class="empty-state" style="grid-column:1/-1">
-        <div class="empty-icon">📭</div>
-        <p>还没有资源，点击下方 ⚙️ 添加</p>
-      </div></div>
+      <div class="resource-card">
+        <div class="cover-placeholder cover-ppt">
+          📊
+        </div>
+        <div class="card-body">
+          <span class="card-category cat-ppt">课件游戏</span>
+          <div class="card-title">课堂游戏PPT</div>
+          <div class="card-desc">暂无描述</div>
+          <div class="card-footer">
+            <span class="card-date">8/31</span>
+            <button class="btn-download" onclick="download('mth253a5gf8qv8')">
+              ⬇️ 下载
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
   <div class="footer">
     Powered by ❤️
@@ -831,8 +844,20 @@ a { text-decoration: none; color: inherit; }
 
       <!-- Resource List -->
       <div class="admin-resources">
-        <h3>📋 已有资源 (<span id="adminCount">1</span>)</h3>
+        <h3>📋 已有资源 (<span id="adminCount">2</span>)</h3>
         <div id="adminList">
+    <div class="admin-item">
+      <div class="admin-item-icon">📦</div>
+      <div class="admin-item-info">
+        <div class="admin-item-title">百度输入法皮肤</div>
+        <div class="admin-item-cat">其他资源</div>
+      </div>
+      <div class="admin-item-actions">
+        <button class="admin-btn-sm admin-btn-edit" onclick="editResource('mth26qg7jv2x7b')" title="编辑">✏️</button>
+        <button class="admin-btn-sm admin-btn-del" onclick="deleteResource('mth26qg7jv2x7b')" title="删除">🗑️</button>
+      </div>
+    </div>
+  
     <div class="admin-item">
       <div class="admin-item-icon">📊</div>
       <div class="admin-item-info">
@@ -864,7 +889,7 @@ a { text-decoration: none; color: inherit; }
         </div>
         <div class="gh-status show" id="ghStatus">✅ Token 已配置</div>
         <div class="gh-upload-banner" id="ghUploadBanner">
-          <p id="ghUploadMsg"></p>
+          <p id="ghUploadMsg">✅ 已成功同步到 GitHub！网站将在 1~2 分钟内自动更新。</p>
         </div>
       </div>
     </div>
@@ -898,6 +923,16 @@ var __SITE_DATA__ = {
     "desc": "精选资源 · 免费下载"
   },
   "resources": [
+    {
+      "id": "mth26qg7jv2x7b",
+      "title": "百度输入法皮肤",
+      "desc": "",
+      "category": "其他资源",
+      "emoji": "📦",
+      "link": "https://pan.baidu.com/s/1kjjP1PupyvLMjr-yXcKvIA?pwd=6x7B",
+      "code": "",
+      "createdAt": 1788169896295
+    },
     {
       "id": "mth253a5gf8qv8",
       "title": "课堂游戏PPT",
