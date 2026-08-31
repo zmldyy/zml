@@ -1274,7 +1274,7 @@ function publishUpdate() {
     newHtml = '<!DOCTYPE html>\n' + newHtml;
   }
   
-  // Download the file
+  // Download the file AND copy to clipboard
   const blob = new Blob([newHtml], { type: 'text/html;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -1285,9 +1285,24 @@ function publishUpdate() {
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
   
-  // Show banner
+  // Copy to clipboard for easy sync via agent
+  try {
+    await navigator.clipboard.writeText(newHtml);
+  } catch(e) {
+    // Fallback: select text
+    const ta = document.createElement('textarea');
+    ta.value = newHtml;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+  }
+  
+  // Show banner with clear instructions
   document.getElementById('publishBanner').classList.add('show');
-  showToast('已下载新版 index.html');
+  showToast('✅ 文件已下载并复制到剪贴板！请将内容粘贴发给扣子助手，它会自动帮你更新到 GitHub');
 }
 
 // ===== GitHub Auto Upload =====
