@@ -1376,12 +1376,17 @@ async function githubUpload() {
     
     let sha = null;
     try {
-      const getResp = await fetch(apiUrl + '?ref=' + GH_BRANCH, { headers });
+      const _ctrl1 = new AbortController();
+      const _timer1 = setTimeout(() => _ctrl1.abort(), 30000);
+      const getResp = await fetch(apiUrl + '?ref=' + GH_BRANCH, { headers, signal: _ctrl1.signal });
+      clearTimeout(_timer1);
       if (getResp.ok) {
         const getData = await getResp.json();
         sha = getData.sha;
       }
-    } catch(e) { /* file may not exist yet */ }
+    } catch(e) {
+      if (e.name === 'AbortError') throw new Error('获取文件信息超时（30秒），请检查网络后重试');
+    }
     
     // 3. Base64 encode content
     const content = btoa(unescape(encodeURIComponent(newHtml)));
@@ -1394,11 +1399,15 @@ async function githubUpload() {
     };
     if (sha) body.sha = sha;
     
+    const _ctrl2 = new AbortController();
+    const _timer2 = setTimeout(() => _ctrl2.abort(), 60000);
     const putResp = await fetch(apiUrl, {
       method: 'PUT',
       headers: headers,
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
+      signal: _ctrl2.signal
     });
+    clearTimeout(_timer2);
     
     if (!putResp.ok) {
       const errData = await putResp.json().catch(() => ({}));
@@ -1413,8 +1422,9 @@ async function githubUpload() {
     showToast('GitHub 同步成功');
     
   } catch(err) {
-    showGithubUploadBanner('❌ ' + err.message, true);
-    showToast('上传失败: ' + err.message);
+    const errMsg = err.name === 'AbortError' ? '上传超时（60秒），请检查网络后重试' : err.message;
+    showGithubUploadBanner('❌ ' + errMsg, true);
+    showToast('上传失败: ' + errMsg);
   } finally {
     btn.disabled = false;
     btn.textContent = '🚀 一键同步到 GitHub';
