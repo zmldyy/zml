@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head>
+<html lang="zh-CN">
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>资源站</title>
@@ -713,7 +714,7 @@ a { text-decoration: none; color: inherit; }
 <body>
 
 <!-- Toast -->
-<div class="toast" id="toast">资源添加成功，记得点「发布更新」同步</div>
+<div class="toast" id="toast"></div>
 
 <!-- ===== Visitor View ===== -->
 <div id="app">
@@ -725,45 +726,28 @@ a { text-decoration: none; color: inherit; }
 
   <div class="stats-bar">
     <div class="stat-item">
-      <div class="stat-num" id="statTotal">1</div>
+      <div class="stat-num" id="statTotal">0</div>
       <div class="stat-label">全部资源</div>
     </div>
     <div class="stat-item">
-      <div class="stat-num" id="statCat">1</div>
+      <div class="stat-num" id="statCat">0</div>
       <div class="stat-label">分类</div>
     </div>
     <div class="stat-item">
-      <div class="stat-num" id="statToday">1</div>
+      <div class="stat-num" id="statToday">0</div>
       <div class="stat-label">今日更新</div>
     </div>
   </div>
 
   <div class="tabs-wrapper">
-    <div class="tabs" id="tabs"><div class="tab active" onclick="switchCat('全部')">全部</div><div class="tab " onclick="switchCat('课件游戏')">课件游戏</div></div>
+    <div class="tabs" id="tabs"></div>
   </div>
 
   <div class="search-bar">
     <input type="text" class="search-input" placeholder="搜索资源..." id="searchInput" oninput="renderResources()">
   </div>
 
-  <div class="resources" id="resourceList">
-      <div class="resource-card">
-        <div class="cover-placeholder cover-ppt">
-          📊
-        </div>
-        <div class="card-body">
-          <span class="card-category cat-ppt">课件游戏</span>
-          <div class="card-title">课堂游戏PPT</div>
-          <div class="card-desc">暂无描述</div>
-          <div class="card-footer">
-            <span class="card-date">8/31</span>
-            <button class="btn-download" onclick="download('mth0dtk6vctqta')">
-              ⬇️ 下载
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="resources" id="resourceList"></div>
 
   <div class="footer">
     Powered by ❤️
@@ -786,7 +770,7 @@ a { text-decoration: none; color: inherit; }
 </div>
 
 <!-- ===== Admin Panel ===== -->
-<div class="admin-overlay show" id="adminOverlay">
+<div class="admin-overlay" id="adminOverlay">
   <div class="admin-panel">
     <div class="admin-header">
       <h2 id="adminTitle">📝 添加资源</h2>
@@ -840,32 +824,8 @@ a { text-decoration: none; color: inherit; }
 
       <!-- Resource List -->
       <div class="admin-resources">
-        <h3>📋 已有资源 (<span id="adminCount">2</span>)</h3>
-        <div id="adminList">
-    <div class="admin-item">
-      <div class="admin-item-icon">📦</div>
-      <div class="admin-item-info">
-        <div class="admin-item-title">百度输入法皮肤</div>
-        <div class="admin-item-cat">其他资源</div>
-      </div>
-      <div class="admin-item-actions">
-        <button class="admin-btn-sm admin-btn-edit" onclick="editResource('mth0it6wi933z0')" title="编辑">✏️</button>
-        <button class="admin-btn-sm admin-btn-del" onclick="deleteResource('mth0it6wi933z0')" title="删除">🗑️</button>
-      </div>
-    </div>
-  
-    <div class="admin-item">
-      <div class="admin-item-icon">📊</div>
-      <div class="admin-item-info">
-        <div class="admin-item-title">课堂游戏PPT</div>
-        <div class="admin-item-cat">课件游戏</div>
-      </div>
-      <div class="admin-item-actions">
-        <button class="admin-btn-sm admin-btn-edit" onclick="editResource('mth0dtk6vctqta')" title="编辑">✏️</button>
-        <button class="admin-btn-sm admin-btn-del" onclick="deleteResource('mth0dtk6vctqta')" title="删除">🗑️</button>
-      </div>
-    </div>
-  </div>
+        <h3>📋 已有资源 (<span id="adminCount">0</span>)</h3>
+        <div id="adminList"></div>
         <div class="admin-tools">
           <button class="btn-tool" onclick="changePassword()">🔑 修改密码</button>
           <button class="btn-tool" onclick="editSiteInfo()">🏠 站点设置</button>
@@ -876,16 +836,16 @@ a { text-decoration: none; color: inherit; }
         </div>
         
         <!-- GitHub 一键上传 -->
-        <button class="btn-github" id="btnGithubUpload" onclick="githubUpload()" disabled="">⏳ 正在上传...</button>
+        <button class="btn-github" id="btnGithubUpload" onclick="githubUpload()">🚀 一键同步到 GitHub</button>
         <div class="gh-token-box" id="ghTokenBox">
           <label>🔑 输入 GitHub Personal Access Token</label>
           <input type="password" id="ghTokenInput" placeholder="ghp_xxxxxxxxxxxx">
           <button class="gh-save-btn" onclick="saveGitHubToken()">保存 Token</button>
           <p class="gh-hint">Token 仅保存在本浏览器，用于调用 GitHub API 自动上传。生成地址：<a href="https://github.com/settings/tokens" target="_blank" style="color:#0369A1;text-decoration:underline;">GitHub → Settings → Tokens</a>，勾选 repo 权限。</p>
         </div>
-        <div class="gh-status show" id="ghStatus">✅ Token 已配置</div>
+        <div class="gh-status" id="ghStatus">✅ Token 已配置</div>
         <div class="gh-upload-banner" id="ghUploadBanner">
-          <p id="ghUploadMsg">✅ 已成功同步到 GitHub！网站将在 1~2 分钟内自动更新。</p>
+          <p id="ghUploadMsg"></p>
         </div>
       </div>
     </div>
@@ -918,28 +878,7 @@ var __SITE_DATA__ = {
     "title": "资源站",
     "desc": "精选资源 · 免费下载"
   },
-  "resources": [
-    {
-      "id": "mth0it6wi933z0",
-      "title": "百度输入法皮肤",
-      "desc": "超多输入法皮肤，安卓苹果都可以使用",
-      "category": "其他资源",
-      "emoji": "📦",
-      "link": "https://pan.baidu.com/s/1kjjP1PupyvLMjr-yXcKvIA?pwd=6x7B",
-      "code": "",
-      "createdAt": 1788167100488
-    },
-    {
-      "id": "mth0dtk6vctqta",
-      "title": "课堂游戏PPT",
-      "desc": "",
-      "category": "课件游戏",
-      "emoji": "📊",
-      "link": "https://pan.quark.cn/s/6f2c3bb61648",
-      "code": "",
-      "createdAt": 1788166867686
-    }
-  ]
+  "resources": []
 };
 
 // ===== Data Layer (embedded, no localStorage) =====
@@ -1440,6 +1379,5 @@ function init() {
 
 init();
 </script>
-
-
-</body></html>
+</body>
+</html>
