@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <html lang="zh-CN" style="-webkit-touch-callout: none;"><head>
+<meta name="version" content="1788173111">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>资源站</title>
@@ -709,6 +713,20 @@ a { text-decoration: none; color: inherit; }
   line-height: 1.5;
 }
 </style>
+
+<script>
+// Unregister any service workers and clear caches on page load
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(regs) {
+    for (let reg of regs) { reg.unregister(); }
+  });
+}
+if ('caches' in window) {
+  caches.keys().then(function(names) {
+    for (let name of names) { caches.delete(name); }
+  });
+}
+</script>
 </head>
 <body>
 
