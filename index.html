@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head>
+<html lang="zh-CN" style="-webkit-touch-callout: none;"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>资源站</title>
@@ -709,12 +709,8 @@ a { text-decoration: none; color: inherit; }
   line-height: 1.5;
 }
 </style>
-<style class="huiyi-global">
-    .huiyi-dialog-parent-no-scroll{
-      overflow: hidden !important;
-    }
-    </style></head>
-<body ai-translate-version="3.0.5" ai-translate-id="dkmejdpchbkcihdlengmhifgnigdjmba" ai-translate-oem="lenovo">
+</head>
+<body>
 
 <!-- Toast -->
 <div class="toast" id="toast">资源添加成功，记得点「发布更新」同步</div>
@@ -729,21 +725,21 @@ a { text-decoration: none; color: inherit; }
 
   <div class="stats-bar">
     <div class="stat-item">
-      <div class="stat-num" id="statTotal">1</div>
+      <div class="stat-num" id="statTotal">0</div>
       <div class="stat-label">全部资源</div>
     </div>
     <div class="stat-item">
-      <div class="stat-num" id="statCat">1</div>
+      <div class="stat-num" id="statCat">0</div>
       <div class="stat-label">分类</div>
     </div>
     <div class="stat-item">
-      <div class="stat-num" id="statToday">1</div>
+      <div class="stat-num" id="statToday">0</div>
       <div class="stat-label">今日更新</div>
     </div>
   </div>
 
   <div class="tabs-wrapper">
-    <div class="tabs" id="tabs"><div class="tab active" onclick="switchCat('全部')">全部</div><div class="tab " onclick="switchCat('课件游戏')">课件游戏</div></div>
+    <div class="tabs" id="tabs"><div class="tab active" onclick="switchCat('全部')">全部</div></div>
   </div>
 
   <div class="search-bar">
@@ -751,23 +747,10 @@ a { text-decoration: none; color: inherit; }
   </div>
 
   <div class="resources" id="resourceList">
-      <div class="resource-card">
-        <div class="cover-placeholder cover-ppt">
-          📊
-        </div>
-        <div class="card-body">
-          <span class="card-category cat-ppt">课件游戏</span>
-          <div class="card-title">课堂游戏PPT</div>
-          <div class="card-desc">暂无描述</div>
-          <div class="card-footer">
-            <span class="card-date">8/31</span>
-            <button class="btn-download" onclick="download('mth253a5gf8qv8')">
-              ⬇️ 下载
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+      <div class="empty-state" style="grid-column:1/-1">
+        <div class="empty-icon">📭</div>
+        <p>还没有资源，点击下方 ⚙️ 添加</p>
+      </div></div>
 
   <div class="footer">
     Powered by ❤️
@@ -790,7 +773,7 @@ a { text-decoration: none; color: inherit; }
 </div>
 
 <!-- ===== Admin Panel ===== -->
-<div class="admin-overlay" id="adminOverlay">
+<div class="admin-overlay show" id="adminOverlay">
   <div class="admin-panel">
     <div class="admin-header">
       <h2 id="adminTitle">📝 添加资源</h2>
@@ -844,20 +827,8 @@ a { text-decoration: none; color: inherit; }
 
       <!-- Resource List -->
       <div class="admin-resources">
-        <h3>📋 已有资源 (<span id="adminCount">2</span>)</h3>
+        <h3>📋 已有资源 (<span id="adminCount">1</span>)</h3>
         <div id="adminList">
-    <div class="admin-item">
-      <div class="admin-item-icon">📦</div>
-      <div class="admin-item-info">
-        <div class="admin-item-title">百度输入法皮肤</div>
-        <div class="admin-item-cat">其他资源</div>
-      </div>
-      <div class="admin-item-actions">
-        <button class="admin-btn-sm admin-btn-edit" onclick="editResource('mth26qg7jv2x7b')" title="编辑">✏️</button>
-        <button class="admin-btn-sm admin-btn-del" onclick="deleteResource('mth26qg7jv2x7b')" title="删除">🗑️</button>
-      </div>
-    </div>
-  
     <div class="admin-item">
       <div class="admin-item-icon">📊</div>
       <div class="admin-item-info">
@@ -865,8 +836,8 @@ a { text-decoration: none; color: inherit; }
         <div class="admin-item-cat">课件游戏</div>
       </div>
       <div class="admin-item-actions">
-        <button class="admin-btn-sm admin-btn-edit" onclick="editResource('mth253a5gf8qv8')" title="编辑">✏️</button>
-        <button class="admin-btn-sm admin-btn-del" onclick="deleteResource('mth253a5gf8qv8')" title="删除">🗑️</button>
+        <button class="admin-btn-sm admin-btn-edit" onclick="editResource('mth2fyscqryfqw')" title="编辑">✏️</button>
+        <button class="admin-btn-sm admin-btn-del" onclick="deleteResource('mth2fyscqryfqw')" title="删除">🗑️</button>
       </div>
     </div>
   </div>
@@ -887,9 +858,9 @@ a { text-decoration: none; color: inherit; }
           <button class="gh-save-btn" onclick="saveGitHubToken()">保存 Token</button>
           <p class="gh-hint">Token 仅保存在本浏览器，用于调用 GitHub API 自动上传。生成地址：<a href="https://github.com/settings/tokens" target="_blank" style="color:#0369A1;text-decoration:underline;">GitHub → Settings → Tokens</a>，勾选 repo 权限。</p>
         </div>
-        <div class="gh-status" id="ghStatus">✅ Token 已配置</div>
+        <div class="gh-status show" id="ghStatus">✅ Token 已配置</div>
         <div class="gh-upload-banner" id="ghUploadBanner">
-          <p id="ghUploadMsg">✅ 已成功同步到 GitHub！网站将在 1~2 分钟内自动更新。</p>
+          <p id="ghUploadMsg"></p>
         </div>
       </div>
     </div>
@@ -924,24 +895,14 @@ var __SITE_DATA__ = {
   },
   "resources": [
     {
-      "id": "mth26qg7jv2x7b",
-      "title": "百度输入法皮肤",
-      "desc": "",
-      "category": "其他资源",
-      "emoji": "📦",
-      "link": "https://pan.baidu.com/s/1kjjP1PupyvLMjr-yXcKvIA?pwd=6x7B",
-      "code": "",
-      "createdAt": 1788169896295
-    },
-    {
-      "id": "mth253a5gf8qv8",
+      "id": "mth2fyscqryfqw",
       "title": "课堂游戏PPT",
       "desc": "",
       "category": "课件游戏",
       "emoji": "📊",
       "link": "https://pan.quark.cn/s/6f2c3bb61648",
       "code": "",
-      "createdAt": 1788169819613
+      "createdAt": 1788170327004
     }
   ]
 };
@@ -1279,16 +1240,8 @@ function changePassword() {
 
 // ===== Publish: Generate updated HTML and download =====
 function publishUpdate() {
-  // Temporarily close admin panel before generating HTML
-  const _ao = document.getElementById('adminOverlay');
-  const _aoOpen = _ao.classList.contains('show');
-  if (_aoOpen) _ao.classList.remove('show');
-  const _to = document.getElementById('toast');
-  const _toShow = _to.classList.contains('show');
-  if (_toShow) _to.classList.remove('show');
+  // Build the new HTML with embedded data
   const currentDoc = document.documentElement.outerHTML;
-  if (_aoOpen) _ao.classList.add('show');
-  if (_toShow) _to.classList.add('show');
   
   // Replace the __SITE_DATA__ block with current data
   const dataJson = JSON.stringify(__SITE_DATA__, null, 2);
@@ -1368,15 +1321,8 @@ async function githubUpload() {
   document.getElementById('ghUploadBanner').classList.remove('show');
   
   try {
-    const _ao2 = document.getElementById('adminOverlay');
-    const _ao2Open = _ao2.classList.contains('show');
-    if (_ao2Open) _ao2.classList.remove('show');
-    const _to2 = document.getElementById('toast');
-    const _to2Show = _to2.classList.contains('show');
-    if (_to2Show) _to2.classList.remove('show');
+    // 1. Build the new HTML with current data
     const currentDoc = document.documentElement.outerHTML;
-    if (_ao2Open) _ao2.classList.add('show');
-    if (_to2Show) _to2.classList.add('show');
     const dataJson = JSON.stringify(__SITE_DATA__, null, 2);
     const newDataBlock = 'var __SITE_DATA__ = ' + dataJson + ';';
     const regex = /var __SITE_DATA__ = \{[\s\S]*?\};/;
@@ -1461,4 +1407,4 @@ init();
 </script>
 
 
-<div style="position: static; display: none; width: 0px; height: 0px; border: none; padding: 0px; margin: 0px;"><div id="trans-tooltip"><div id="tip-left-top" style="background: url(&quot;chrome-extension://jpjgjbbhaifmiigkopmnpbgcgmigaame/imgs/map/tip-left-top.png&quot;);"></div><div id="tip-top" style="background: url(&quot;chrome-extension://jpjgjbbhaifmiigkopmnpbgcgmigaame/imgs/map/tip-top.png&quot;) repeat-x;"></div><div id="tip-right-top" style="background: url(&quot;chrome-extension://jpjgjbbhaifmiigkopmnpbgcgmigaame/imgs/map/tip-right-top.png&quot;);"></div><div id="tip-right" style="background: url(&quot;chrome-extension://jpjgjbbhaifmiigkopmnpbgcgmigaame/imgs/map/tip-right.png&quot;) repeat-y;"></div><div id="tip-right-bottom" style="background: url(&quot;chrome-extension://jpjgjbbhaifmiigkopmnpbgcgmigaame/imgs/map/tip-right-bottom.png&quot;);"></div><div id="tip-bottom" style="background: url(&quot;chrome-extension://jpjgjbbhaifmiigkopmnpbgcgmigaame/imgs/map/tip-bottom.png&quot;) repeat-x;"></div><div id="tip-left-bottom" style="background: url(&quot;chrome-extension://jpjgjbbhaifmiigkopmnpbgcgmigaame/imgs/map/tip-left-bottom.png&quot;);"></div><div id="tip-left" style="background: url(&quot;chrome-extension://jpjgjbbhaifmiigkopmnpbgcgmigaame/imgs/map/tip-left.png&quot;);"></div><div id="trans-content"></div></div><div id="tip-arrow-bottom" style="background: url(&quot;chrome-extension://jpjgjbbhaifmiigkopmnpbgcgmigaame/imgs/map/tip-arrow-bottom.png&quot;);"></div><div id="tip-arrow-top" style="background: url(&quot;chrome-extension://jpjgjbbhaifmiigkopmnpbgcgmigaame/imgs/map/tip-arrow-top.png&quot;);"></div></div><div id="856f5588-2709-40d6-9f87-5848cf3968ea" style=""></div><script src="chrome-extension://dkmejdpchbkcihdlengmhifgnigdjmba/removeChildPatch.js" id="removeChildPatch"></script></body><div id="ai-translate-content-root" class="ai-translate-widget"></div></html>
+</body></html>
