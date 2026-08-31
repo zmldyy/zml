@@ -773,7 +773,7 @@ a { text-decoration: none; color: inherit; }
 </div>
 
 <!-- ===== Admin Panel ===== -->
-<div class="admin-overlay show" id="adminOverlay">
+<div class="admin-overlay" id="adminOverlay">
   <div class="admin-panel">
     <div class="admin-header">
       <h2 id="adminTitle">📝 添加资源</h2>
@@ -1241,7 +1241,25 @@ function changePassword() {
 // ===== Publish: Generate updated HTML and download =====
 function publishUpdate() {
   // Build the new HTML with embedded data
+  // Temporarily remove 'show' from overlays to prevent them appearing in saved HTML
+  const _ao = document.getElementById('adminOverlay');
+  const _at = document.getElementById('adminToast');
+  const _pb = document.getElementById('publishBanner');
+  const _ghb = document.getElementById('ghUploadBanner');
+  const _aoHad = _ao && _ao.classList.contains('show');
+  const _atHad = _at && _at.classList.contains('show');
+  const _pbHad = _pb && _pb.classList.contains('show');
+  const _ghbHad = _ghb && _ghb.classList.contains('show');
+  if (_ao) _ao.classList.remove('show');
+  if (_at) _at.classList.remove('show');
+  if (_pb) _pb.classList.remove('show');
+  if (_ghb) _ghb.classList.remove('show');
   const currentDoc = document.documentElement.outerHTML;
+  // Restore show classes
+  if (_aoHad && _ao) _ao.classList.add('show');
+  if (_atHad && _at) _at.classList.add('show');
+  if (_pbHad && _pb) _pb.classList.add('show');
+  if (_ghbHad && _ghb) _ghb.classList.add('show');
   
   // Replace the __SITE_DATA__ block with current data
   const dataJson = JSON.stringify(__SITE_DATA__, null, 2);
@@ -1322,7 +1340,25 @@ async function githubUpload() {
   
   try {
     // 1. Build the new HTML with current data
+    // Temporarily remove 'show' from overlays to prevent them appearing in saved HTML
+    const _ao = document.getElementById('adminOverlay');
+    const _at = document.getElementById('adminToast');
+    const _pb = document.getElementById('publishBanner');
+    const _ghb = document.getElementById('ghUploadBanner');
+    const _aoHad = _ao && _ao.classList.contains('show');
+    const _atHad = _at && _at.classList.contains('show');
+    const _pbHad = _pb && _pb.classList.contains('show');
+    const _ghbHad = _ghb && _ghb.classList.contains('show');
+    if (_ao) _ao.classList.remove('show');
+    if (_at) _at.classList.remove('show');
+    if (_pb) _pb.classList.remove('show');
+    if (_ghb) _ghb.classList.remove('show');
     const currentDoc = document.documentElement.outerHTML;
+    // Restore show classes
+    if (_aoHad && _ao) _ao.classList.add('show');
+    if (_atHad && _at) _at.classList.add('show');
+    if (_pbHad && _pb) _pb.classList.add('show');
+    if (_ghbHad && _ghb) _ghb.classList.add('show');
     const dataJson = JSON.stringify(__SITE_DATA__, null, 2);
     const newDataBlock = 'var __SITE_DATA__ = ' + dataJson + ';';
     const regex = /var __SITE_DATA__ = \{[\s\S]*?\};/;
